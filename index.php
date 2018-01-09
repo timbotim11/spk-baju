@@ -166,7 +166,7 @@ function kurangi() {
 	</section>
 
 	<section id="result">
-	    <div class="container">
+	    <div class="container" style="margin: 20px auto;">
 		<h1 class="text-center"> HASIL PERHITUNGAN DENGAN METODE SAW</h1>
 		<hr class="border-result">
 	    </div>
@@ -349,7 +349,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				}
 			 */
 	?>
-	<table>
+	<div class="container">
+	<table class="table">
 	<thead>
 		<tr>
 			<th>No.</th>
@@ -368,8 +369,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		
 	</tbody>
 	</table>
-	<?php $v_real=$v_max+1; echo "Terpilih alternatif ke-{$v_real}, yaitu {$attr['alt'][$v_max]}<br>"; ?>
 
+	<h2><?php $v_real=$v_max+1; echo "Terpilih alternatif ke-{$v_real}, yaitu {$attr['alt'][$v_max]}<br>"; ?>
+</h2>
+	</div>
+	
 
 <?php
 }
