@@ -173,8 +173,8 @@ function kurangi() {
 	</section>
 <?php 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	echo 'Hello World<br>';
-	echo $_POST['total'].'<br>';
+	echo '<script>console.log("Hello World");</script>';
+	echo '<script>console.log("'.$_POST['total'].'");</script>';
 
 	$total=$_POST['total'];
 			/*$test = [];
@@ -192,6 +192,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$attr[$val][] = (int)$_POST[$val.$i];
 		}
 	}
+	$attr['alt'] = [];
+	for ($i=1; $i<=$total; $i++){
+		$attr['alt'][] = htmlspecialchars($_POST['alt'.$i]);
+	}
+
 			/*for ($i=0; $i<$total; $i++){
 				echo $attr['harga'][$i].'<br>';
 			}*/
@@ -235,12 +240,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$x_pro=1; //perkalian dari semua x pada suatu alt
 		foreach ($attr_val as &$val){
 			$x_pro=$x_pro*($attr[$val][$i]**($b[$val]*$f[$val]));
-			echo "x$i $val = {$attr[$val][$i]}, x_pro=$x_pro<br>";
+			echo "<script>console.log(\"x$i $val = {$attr[$val][$i]}, x_pro=$x_pro\");</script>";
 		}
 		$s[] = $x_pro;
 	}
 	for ($i=0; $i<$total; $i++){
-		echo "s$i = $s[$i]<br>";
+		echo "<script>console.log(\"s$i = $s[$i]\");</script>";
 	}
 	$s_tot=0; //total semua s
 
@@ -256,10 +261,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 
 	for ($i=0; $i<$total; $i++){
-		echo "V$i = $v[$i]<br>";
+		echo "<script>console.log(\"V$i = $v[$i]\");</script>";
 	}
 	$v_max = array_search(max($v),$v);
-	echo "Terpilih alternatif ke-$v_max<br>";
+	echo "<script>console.log(\"Terpilih alternatif ke-$v_max\");</script>";
 
 
 			/*foreach ($attr as &$val) {
@@ -323,7 +328,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 			$b_tebal=0.2;
 			$b_tekstur=0.2;
 			$b_motif=0.2;
-			$b_total=$b_harga+$b_bahan+$b_tebal+$b_tekstur+$b_motif;
+			$b_total=$b_harga+$b_bahan+$b_tebal+$b_te>kstur+$b_motif;
 
 			//normalisasi bobot
 			$n_b_harga=$b_harga/$b_total;
@@ -340,9 +345,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 				$s = [];
 
 				for ($i = 0; $i < $total; $i++){
-
+ 
 				}
 			 */
+	?>
+	<table>
+	<thead>
+		<tr>
+			<th>No.</th>
+			<th>Alternatif</th>
+			<th>Nilai</th>
+		</tr>
+	</thead>
+	<tbody>
+	<?php for ($i=0; $i<$total; $i++){ ?>
+		<tr>
+		<td><?php echo $i+1; ?></td>
+		<td><?php echo $attr['alt'][$i]; ?></td>
+		<td><?php echo $v[$i]; ?></td>
+		</tr>	
+	<?php } ?>
+		
+	</tbody>
+	</table>
+	<?php $v_real=$v_max+1; echo "Terpilih alternatif ke-{$v_real}, yaitu {$attr['alt'][$v_max]}<br>"; ?>
+
+
+<?php
 }
 ?>
 
