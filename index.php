@@ -220,6 +220,44 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$b['tekstur']=0.2;
 	$b['motif']=0.2;
 
+	//metode SAW
+	//cari r
+	
+	$dv = array(); //pembagi atau yg membagi
+	foreach ($attr_val as &$val){
+		if ($f[$val] == 1){
+			$dv[$val] = max($attr[$val]);
+		} else if ($f[$val] == -1){
+			$dv[$val] = min($attr[$val]);
+		}
+	}
+
+	$r = array();
+	foreach ($attr_val as &$val){
+		$r[$val] = [];
+		if ($f[$val] == 1){
+			for ($i=0; $i<$total; $i++){
+				$r[$val][] = $attr[$val][$i]/$dv[$val];  
+			}
+		} else if ($f[$val] == -1){
+			for ($i=0; $i<$total; $i++){
+				$r[$val][] = $dv[$val]/$attr[$val][$i];
+			}
+		}
+	}
+
+	//menghitung v
+	$v = [];
+	for ($i=0; $i<$total; $i++){
+		$tot = 0;
+		foreach ($attr_val as &$val){
+			$tot = $tot + $b[$val] * $r[$val][$i];
+		}
+		$v[] = $tot;
+	}
+
+	/*
+	//metode WP -- tidak jadi
 	//normalisasi bobot
 
 	$n_b = array();//bobot dinormalisasi
@@ -263,9 +301,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	for ($i=0; $i<$total; $i++){
 		echo "<script>console.log(\"V$i = $v[$i]\");</script>";
 	}
-	$v_max = array_search(max($v),$v);
-	echo "<script>console.log(\"Terpilih alternatif ke-$v_max\");</script>";
-
+	*/
+	arsort($v);
 
 			/*foreach ($attr as &$val) {
 				eval('$'.$val. ' = []; for($i=1; $i<=$total; $i++){ $'.$val.'[] = (int)$_POST[\''.$val.'\'.$i]; }');
@@ -359,18 +396,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		</tr>
 	</thead>
 	<tbody>
-	<?php for ($i=0; $i<$total; $i++){ ?>
+	<?php $no=1; $v_max=0; foreach ($v as $key => $val){ ?>
 		<tr>
-		<td><?php echo $i+1; ?></td>
-		<td><?php echo $attr['alt'][$i]; ?></td>
-		<td><?php echo $v[$i]; ?></td>
+		<?php if ($no == 1){$v_max=$key;} ?>
+		<td><?php echo $no++; ?></td>
+		<td><?php echo $attr['alt'][$key]; ?></td>
+		<td><?php echo $v[$key]; ?></td>
 		</tr>	
 	<?php } ?>
 		
 	</tbody>
 	</table>
 
-	<h2><?php $v_real=$v_max+1; echo "Terpilih alternatif ke-{$v_real}, yaitu {$attr['alt'][$v_max]}<br>"; ?>
+	<h2><?php echo "Terpilih alternatif {$attr['alt'][$v_max]}<br>"; ?>
 </h2>
 	</div>
 	
